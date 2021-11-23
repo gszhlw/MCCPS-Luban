@@ -1,0 +1,10 @@
+ensemble
+nvt
+temperature
+3000.00
+nmolty
+1
+nummols
+300
+numboxes
+200
