@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MCCPS_luban.dir/main.cpp.o"
+  "CMakeFiles/MCCPS_luban.dir/luban_test.cpp.o"
   "MCCPS_luban"
   "MCCPS_luban.pdb"
 )

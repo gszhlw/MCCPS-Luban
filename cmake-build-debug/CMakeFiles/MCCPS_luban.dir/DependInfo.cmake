@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/zlw/CLionProjects/MCCPS luban/main.cpp" "/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles/MCCPS_luban.dir/main.cpp.o"
+  "/Users/zlw/CLionProjects/MCCPS luban/luban_test.cpp" "/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles/MCCPS_luban.dir/luban_test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

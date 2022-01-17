@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+luban_test.o: luban_test.cpp.o
+.PHONY : luban_test.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/main.cpp.o
-.PHONY : main.cpp.o
+luban_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.o
+.PHONY : luban_test.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+luban_test.i: luban_test.cpp.i
+.PHONY : luban_test.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/main.cpp.i
-.PHONY : main.cpp.i
+luban_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.i
+.PHONY : luban_test.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+luban_test.s: luban_test.cpp.s
+.PHONY : luban_test.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/main.cpp.s
-.PHONY : main.cpp.s
+luban_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.s
+.PHONY : luban_test.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... luban_test.o"
+	@echo "... luban_test.i"
+	@echo "... luban_test.s"
 .PHONY : help
 
 

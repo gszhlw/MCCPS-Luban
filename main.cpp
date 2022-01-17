@@ -4,6 +4,7 @@
 #include <iostream>
 #include<math.h>
 #include<random>
+#include<algorithm>
 
 //#include "config_io.h"
 
@@ -69,8 +70,17 @@ void read_cnf_atoms()
 
 */
 //为了测试给出二维数组形式的原子坐标，全局变量
-double r1[][3] = {{1.0,1.3,4.3},{3.7,2.4,8.6},{2.9,1.0,0.4},{2.0,3.0,4.0},{8.0,9.0,5.0}};
-double r2[][3] = {{3.0,1.2,5.6}, {5.2,1.5,3.0}, {4.3,6.3,8.9}, {1.2, 4.0, 3.0}, {1.0,3.7,2.9}};
+static double r1[][3] = {{-3.0575316266, -3.0575316266, -3.0575316266},{-0.4367902324, -3.0575316266, 1.3103706971},{ -1.3103706971, 2.1839511618, -1.3103706971},{0.4367902324, -1.3103706971, -1.3103706971},{ 2.1839511618, -1.3103706971, -3.0575316266}};
+static double r2[][3] = {{3.0575316266, 0.4367902324, 1.3103706971}, {3.0575316266, -0.4367902324, -3.0575316266}, {1.3103706971, 3.0575316266, 2.1839511618}, {-2.1839511618, -0.4367902324, -1.3103706971}, {-2.1839511618, -2.1839511618, -1.3103706971}};
+
+//blk_begin中声明的global变量
+double blk_nrm, blk_avg, blk_msd;
+
+//run_begin中声明的global变量
+int n_avg, line_width;
+double run_nrm, run_avg, run_err;
+
+
 
 class VariableType{
     public:
@@ -83,12 +93,13 @@ class PotentialType{
     double pot;
     double vir;
 
-    PotentialType potential_l(int i, double ri[i][3], int box_length, double r_cut, double r[][3]);
+    PotentialType potential_l(int i, double r[i][3], int box_length, double r_cut);
     PotentialType potential(double box_length, double r_cut, double r[][3]);
+    //friend PotentialType operator+(PotentialType& pot, PotentialType& vir);
 
 };
 
-PotentialType PotentialType::potential_l(int i, double ri[i][3], int box_length, double r_cut, double r[][3])
+PotentialType PotentialType::potential_l(int i, double r[i][3], int box_length, double r_cut)
 {
     //ri是一个原子的三维坐标（x，y，z）
     double sr2_ovr = 1.77;
@@ -129,12 +140,34 @@ PotentialType PotentialType::potential(double box_length, double r_cut, double r
     int count = sizeof(r) / sizeof(r[0]);
     for(int i = 0; i < count; i++)
     {
-      partial = potential_l(r[i][3], box_length, r_cut, r);
+      partial = potential_l(i,r, box_length, r_cut);
     }
     total.pot = total.pot + partial.pot;
     total.vir = total.vir + partial.vir;
 
     return total;
+}
+
+PotentialType operator+(const PotentialType& a, const PotentialType& b)
+{
+    //加friend关键字的原因：operator+函数都要用Potential对象进行私有数据访问，作为普通函数这是不允许的，即编译器会报错。
+    //加入friend关键字声明后，编译就对或者两个函数防伪Potential的私有数据网开一面了。
+    PotentialType s;
+    s.pot = a.pot + b.pot;
+    s.vir = a.vir + b.vir;
+
+    return s;
+}
+
+PotentialType operator-(const PotentialType& a, const PotentialType& b)
+{
+    //加friend关键字的原因：operator+函数都要用Potential对象进行私有数据访问，作为普通函数这是不允许的，即编译器会报错。
+    //加入friend关键字声明后，编译就对或者两个函数防伪Potential的私有数据网开一面了。
+    PotentialType s;
+    s.pot = a.pot - b.pot;
+    s.vir = a.vir - b.vir;
+
+    return s;
 }
 
 void introductioin()
@@ -145,6 +178,53 @@ void introductioin()
     printf("Well depth, epsilon = 1\n");
 
 
+}
+
+void run_begin()
+{
+    //基于提供的列表名字建立平均值以及其他属性
+    //该函数关键点在于画出了表格，表头、数据等，且是动态的
+
+
+
+}
+
+void blk_begin()
+{
+    blk_nrm = 0.0;
+    blk_avg = 0.0;
+}
+
+double* random_translate_vector(double dr_max, double r[][3])
+{
+    //生成3个0-1的随机浮点数
+    double num;
+    double *zeta = (double *)calloc(3, sizeof(double *));
+    for(int i = 0; i < 3; i++)
+    {
+        srand(time(NULL));
+        num = (rand() % 1000) * 0.001;
+        zeta[i] = num;
+        zeta[i] = 2.0 * zeta[i] - 1.0;
+    }
+
+
+    //返回一个二维数组，选中的哪一行每一个分量加上zeta的值
+    return zeta;
+}
+
+bool metropolis(double delta)
+{
+    double exponent_guard = 75.0;
+    double zeta;
+    if(delta > exponent_guard)
+        return false;
+    else
+    {
+        srand(time(NULL));
+        zeta = (rand() % 1000) * 0.001;
+        return exp(-delta) > zeta;
+    }
 }
 int main() {
 
@@ -158,8 +238,8 @@ int main() {
 
     string ensemble = "gemc_nvt";
     double temperature = 1.0;
-    int n1 = 256; //原子个数
-    int n2 = 256;
+    int n1 = 5; //原子个数
+    int n2 = 5;
     double box_length1 = 5.0;
     double box_length2 = 5.0;
     double r_cut = 2.0;
@@ -235,7 +315,78 @@ int main() {
 
     introductioin();
 
+    //写出相应参数
     printf("Number of blocks:   %d\n", &nblock);
+    printf("Number of steps per block:  %d\n", &nstep);
+    printf("Swap attempts per step:     %d\n", &nswap);
+    printf("Specified temperature:      %d\n", &temperature);
+    printf("Potential cutoff distance:      %lf\n", &r_cut);
+    printf("Maximum displacement:   %lf\n", &dr_max);
+    printf("Maximum volume change:      %d\n", &dv_max);
+
+    printf("Number of particles:    %d      %d\n", &n1, &n2);
+    printf("Simulation box length:      %d      %d\n", &box_length1, &box_length2);
+    printf("Density:    %lf      %d", &density1, &density2);
+
+
+    double m1_ratio = 0.0;
+    run_begin();
+
+
+    //从构型文件中读入原子坐标
+
+    //将坐标转换为模拟盒单位
+    for(int i = 0; i < 5; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            r1[i][j] = r1[i][j] / box_length1;
+            r2[i][j] = r2[i][j] / box_length2;
+        }
+    }
+
+    for(int i = 0; i < nblock; i++)
+    {
+        //blk_begin
+
+
+        for(int j = 0; j < nstep; j++)
+        {
+            double m_acc = 0.0;
+            double *zeta = (double *) calloc(3,sizeof(double));
+
+            for(int k = 0; k < n1; k++)
+            {
+                PotentialType partial_old;
+                PotentialType partial_new;
+                double delta;
+                partial_old.potential_l(k,r1,box_length1,r_cut);
+                zeta = random_translate_vector(dr_max / box_length1, r1);
+                for (int i = 0; i < 3; ++i) {
+                    r1[k][i] = r1[k][i] + zeta[i];
+                }
+
+                partial_new.potential_l(k,r1,box_length1,r_cut);
+                delta = partial_new.pot - partial_old.pot;
+                delta = delta / temperature;
+                if(metropolis(delta))
+                {
+                    total1_energy = operator+(total1_energy,(operator-(partial_new,partial_old))) ;
+                    m_acc++;
+                }
+
+            m1_ratio / m_acc / n1;
+
+
+
+            }
+        }
+    }
+
+
+
+
+
 
 
 

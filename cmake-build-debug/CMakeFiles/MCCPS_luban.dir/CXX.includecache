@@ -6,11 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/zlw/CLionProjects/MCCPS luban/config_io.h
-iostream
--
-
-/Users/zlw/CLionProjects/MCCPS luban/main.cpp
+/Users/zlw/CLionProjects/MCCPS luban/luban_test.cpp
 vector
 -
 string
@@ -19,6 +15,12 @@ fstream
 -
 iostream
 -
-config_io.h
-/Users/zlw/CLionProjects/MCCPS luban/config_io.h
+fstream
+-
+math.h
+-
+random
+-
+algorithm
+-
 
