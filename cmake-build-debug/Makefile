@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-luban_test.o: luban_test.cpp.o
-.PHONY : luban_test.o
+luban_vector_refactoring.o: luban_vector_refactoring.cpp.o
+.PHONY : luban_vector_refactoring.o
 
 # target to build an object file
-luban_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.o
-.PHONY : luban_test.cpp.o
+luban_vector_refactoring.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.o
+.PHONY : luban_vector_refactoring.cpp.o
 
-luban_test.i: luban_test.cpp.i
-.PHONY : luban_test.i
+luban_vector_refactoring.i: luban_vector_refactoring.cpp.i
+.PHONY : luban_vector_refactoring.i
 
 # target to preprocess a source file
-luban_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.i
-.PHONY : luban_test.cpp.i
+luban_vector_refactoring.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.i
+.PHONY : luban_vector_refactoring.cpp.i
 
-luban_test.s: luban_test.cpp.s
-.PHONY : luban_test.s
+luban_vector_refactoring.s: luban_vector_refactoring.cpp.s
+.PHONY : luban_vector_refactoring.s
 
 # target to generate assembly for a file
-luban_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_test.cpp.s
-.PHONY : luban_test.cpp.s
+luban_vector_refactoring.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.s
+.PHONY : luban_vector_refactoring.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... luban_test.o"
-	@echo "... luban_test.i"
-	@echo "... luban_test.s"
+	@echo "... luban_vector_refactoring.o"
+	@echo "... luban_vector_refactoring.i"
+	@echo "... luban_vector_refactoring.s"
 .PHONY : help
 
 

@@ -2,4 +2,4 @@ cmake_minimum_required(VERSION 3.20)
 project(MCCPS_luban)
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(MCCPS_luban luban_test.cpp)
+add_executable(MCCPS_luban luban_vector_refactoring.cpp)
