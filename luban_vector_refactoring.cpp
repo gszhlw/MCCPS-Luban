@@ -29,8 +29,12 @@ public:
     static PotentialType potential_1(double *ri, double box_length, double r_cut, double **atoms, int n);
     //PotentialType operator+(PotentialType &p) const;
     //PotentialType operator*(PotentialType &p1,PotentialType &p2) const;
-    PotentialType potential(double box_length, double r_cut, double r[][3]);
+    PotentialType potential(double box_length, double r_cut, double **atoms,int n);
     //friend PotentialType operator+(PotentialType& pot, PotentialType& vir);
+
+    static PotentialType potential_1_vec(vector<double> &ri, double box_length, double r_cut, vector<vector<double>> &atoms, int n);
+
+
 
 };
 
@@ -106,6 +110,72 @@ PotentialType PotentialType :: potential_1(double *ri, double box_length, double
     return partial;
 
 }
+PotentialType PotentialType:: potential_1_vec(vector<double> &ri, double box_length, double r_cut, vector<vector<double>> &atoms, int n)
+{
+    double sr2_ovr = 1.77;
+    double r_cut_box = r_cut / box_length;
+    double r_cut_box_sq = pow(r_cut_box,2);
+    double box_sq = pow(box_length,2);
+
+    double rij_sq;
+    double sr2;
+    double sr6;
+    double sr12;
+    bool ovr;
+
+    PotentialType partial;
+    PotentialType potential;
+
+    vector<double> rij(3);
+    for(int j = 0; j < n; j++)
+    {
+        if((ri[0] == atoms[j][0])&&(ri[1] == atoms[j][1])&&(ri[2] == atoms[j][2]))
+        {
+            continue;
+        }
+
+        rij[0] = ri[0] - atoms[j][0];
+        rij[1] = ri[1] - atoms[j][1];
+        rij[2] = ri[2] - atoms[j][2];
+        //cout<<rij[0]<<' '<<rij[1]<<' '<<rij[2]<<endl;
+        //在模拟盒尺寸为1时，应用周期性边界条件
+        rij[0] = rij[0] - round(rij[0]);
+        rij[1] = rij[1] - round(rij[1]);
+        rij[2] = rij[2] - round(rij[2]);
+        //cout<<rij[0]<<' '<<rij[1]<<' '<<rij[2]<<endl;
+        rij[0] = pow(rij[0],2);
+        rij[1] = pow(rij[1],2);
+        rij[2] = pow(rij[2],2);
+        //cout<<setprecision(8)<<rij[0]<<' '<<rij[1]<<' '<<rij[2]<<endl;
+
+        rij_sq = rij[0] + rij[1] + rij[2];
+
+        if(rij_sq < r_cut_box_sq)
+        {
+            rij_sq = rij_sq * box_sq;
+            //cout<<"rij_sp: "<<rij_sq<<endl;
+            sr2 = 1.0 / rij_sq;
+            //cout<<"sr2: "<<sr2<<endl;
+            ovr = (sr2 > sr2_ovr);
+
+            sr6 = pow(sr2, 3);
+            //cout<<"sr6: "<<sr6<<endl;
+            sr12 = pow(sr6, 2);
+            //cout<<"sr12: "<<sr12<<endl;
+            //potential = sr12 - sr6;
+            potential.pot= sr12 - sr6;
+            partial.pot = partial.pot + potential.pot;
+            //cout<<"potential_1中的partial： "<<partial.pot<<endl;
+        }
+
+    }
+
+    partial.pot = 4.0 * partial.pot;
+
+    return partial;
+
+}
+
 
 PotentialType potential(double box_length, double r_cut, double **atoms,int n)
 {
@@ -232,6 +302,23 @@ void free_2D_array(double **array, int rows)
     delete[] array;
 }
 
+vector<int> randperm(int Num)
+{
+    vector<int> temp;
+    for (int i = 0; i < Num; ++i)
+    {
+        temp.push_back(i + 1);
+    }
+
+    random_shuffle(temp.begin(), temp.end());
+    /*
+    for (int i = 0; i < temp.size(); i++)
+    {
+        cout << temp[i] << " ";
+    }
+     */
+    return temp;
+}
 
 
 int main() {
@@ -264,6 +351,10 @@ int main() {
 
     vector<vector<double> > atoms1(nmolty1, vector<double>(4));
     vector<vector<double> > cors1(nmolty1, vector<double>(3));
+
+    atoms1.reserve(500);
+    cors1.reserve(500);
+
     //vector<vector<double>>::iterator iter;
     //vector<double>::iterator it_col;
     //vector<double>vec_tmp;
@@ -331,6 +422,9 @@ int main() {
 
     vector<vector<double> > atoms2(nmolty1, vector<double>(4));
     vector<vector<double> > cors2(nmolty1, vector<double>(3));
+
+    atoms2.reserve(500);
+    cors2.reserve(500);
 
     for(int i =0; i < nmolty2;i++)
     {
@@ -416,7 +510,7 @@ int main() {
                 cors1_array[i][2] = ri[2];
 
                 m_acc = m_acc + 1;
-                cout << "box1：m_acc:" << m_acc << endl;
+                //cout << "box1：m_acc:" << m_acc << endl;
             }
 
 
@@ -439,7 +533,8 @@ int main() {
             //cout<<"box2：partial_old:"<<partial_old.pot<<endl;
             //cout<<"box2：partial_new:"<<partial_new.pot<<endl;
 
-            if (!partial_new.ovr) {
+            if (!partial_new.ovr)
+            {
                 delta = partial_old.pot - partial_new.pot;
                 delta = delta / temperature;
             }
@@ -457,7 +552,7 @@ int main() {
 
 
                 m_acc = m_acc + 1;
-                cout << "box2：m_acc:" << m_acc << endl;
+                //cout << "box2：m_acc:" << m_acc << endl;
             }
 
         }
@@ -470,17 +565,15 @@ int main() {
         int x12_try = 0, x21_try = 0;
         int x12_acc = 0, x21_acc = 0;
 
+        PotentialType  partial_old;
+        PotentialType partial_new;
+
         for(int j = 0; j < nswap; j++)
         {
             //3个（0，1）均匀分布的随机数
-            PotentialType  partial_old;
-            PotentialType partial_new;
 
-
-            //这里的逻辑有点问题，如果是随机生成的一组坐标，不能确定他就是盒子1中的某个粒子
-
-            double* ri = new double[3];
-
+            //double* ri = new double[3];
+            vector <double> ri(3);
             //随机选择box1中的任意一个粒子
 
             random_device seed_device;
@@ -490,6 +583,7 @@ int main() {
             uniform_int_distribution<int> distr(0, nmolty1);
             int i = distr(engine);
              */
+
             for(int i = 0; i < 3; i++)
             {
                 //ri为-0.5～0.5之间的数，3个为一组坐标,为欲交换到的目标坐标
@@ -497,25 +591,23 @@ int main() {
                 ri[i] = distr(engine);
                 ri[i] = ri[i] - 0.5;
 
+            }
 
-            }
-            /*
-            for(int j = 0; j < 3; j++)
-            {
-                ri[j] = cors1_array[i][j];
-            }
-            */
+
             //random_device seed_device;
             //default_random_engine  engine;
             engine.seed(seed_device());
             uniform_real_distribution<double> distr_rand(0, 1);
             double rand_num = distr_rand(engine);
-           // double rand = 0.4;
+           //double rand_num = 0.4;
+           cout<<"==============================="<<endl;
             cout<<"rand:"<<rand_num<<endl;
 
+            //vector<int>rand_collect = randperm(10);
+            //int num = 0;
 
             //swapping1->2
-            double *curr = NULL;
+
             if(rand_num < 0.5)
             {
                 x12_try = x12_try + 1;
@@ -525,29 +617,37 @@ int main() {
                     random_device seed_device;
                     default_random_engine  engine;
                     engine.seed(seed_device());
-                    uniform_int_distribution<int> distr(0, nmolty1);
-
-
+                    uniform_int_distribution<int> distr(0, nmolty1 - 1);
                     /*
                     int i;
                     srand((int)time(0));
                     i = rand()%nmolty1;
                      */
                     //随机选择box1中的任意一个粒子
+
                     int i = distr(engine);//i就是box1中要删去的第i行，坐标
 
+                   // int i = rand_collect[num++];
+
+                    //vector中erase掉之后并不会紧凑！也就是说，如果下一次又有同样随机值i，vector中那个地方啥也没有，得保证随机值不重复
                     //box1中需要删去的坐标必须是已经在box1中的坐标，但是新插入box2的坐标是任意的（因为插入任意位置）
 
                     //debug
-                    cout<<"cors1_array:"<<cors1_array[i][0]<<" "<<cors1_array[i][1]<<" "<<cors1_array[i][2]<<endl;
+                    cout<<setprecision(9)<<"cors1_array:"<<cors1_array[i][0]<<" "<<cors1_array[i][1]<<" "<<cors1_array[i][2]<<endl;
                     cout<<"ri:"<<ri[0]<<" "<<ri[1]<<" "<<ri[2]<<endl;
                     cout<<"i:"<<i<<endl;
 
 
-                    partial_old = PotentialType::potential_1(cors1_array[i],box_length,r_cut,cors1_array,nmolty1);
-                    //if(!partial_old.ovr) throw "Overlap on particle removal";
+                    //partial_old = PotentialType::potential_1(cors1_array[i],box_length,r_cut,cors1_array,nmolty1);
+                    partial_old = PotentialType::potential_1_vec(cors1[i],box_length,r_cut,cors1,nmolty1);
+                    if(partial_old.ovr)
+                    {
+                        cout<< "Overlap on particle removal"<<endl;
+                        continue;
+                    }
 
-                    partial_new = PotentialType::potential_1(ri,box_length,r_cut,cors2_array,nmolty2);
+                   // partial_new = PotentialType::potential_1(ri,box_length,r_cut,cors2_array,nmolty2);
+                    partial_new = PotentialType::potential_1_vec(ri,box_length,r_cut,cors2,nmolty2);
                     //cout<<"work"<<endl;
                     cout<<"box1：partial_old:"<<partial_old.pot<<endl;
                     cout<<"box1：partial_new:"<<partial_new.pot<<endl;
@@ -558,29 +658,37 @@ int main() {
                         delta = delta - log(pow(box_length,3)/(nmolty2 + 1));
                         delta = delta + log(pow(box_length,3)/nmolty1);
                         cout<<"delta:"<<delta<<endl;
+
                         if(metropolis(delta))
                         {
                             //ri的三个坐标用push_back推入二维向量vector cors2中
+                            cors2.resize(nmolty2 + 1);
+                            //cout<<"nmolty2:"<<nmolty2<<endl;
+                            cout<<"cors2 size:"<<cors2.size()<<endl;
+                            //cout<<"cors2_capacity:"<<cors2.capacity()<<endl;
+
                             cors2[nmolty2].push_back(ri[0]);
                             cors2[nmolty2].push_back(ri[1]);
                             cors2[nmolty2].push_back(ri[2]);
 
-
+                            cout<<"cors2:"<<cors2[nmolty2][0]<<" "<<cors2[nmolty2][1]<<" "<<cors2[nmolty2][2]<<endl;
 
                             //先释放原来的cors2_array的内存，在把新的cors2 vector转换成增加了一行数据后的数组
                             //先记录原来的二维数组位置，防止野指针情况，试试
                             //curr = *cors2_array;
 
-                            cors2_array= convertVector2array(cors2);
+                            //这里有问题，原因八成应该就是因为直接覆盖的方式来创建新数组行不通
+                            //cors2_array= convertVector2array(cors2);
 
-                            nmolty2++;
-                            cout<<"new:cors2_array:"<<cors2_array[nmolty2 - 1][0]<<" "<<cors2_array[nmolty2 - 1][1]<<" "<<cors2_array[nmolty2 - 1][2]<<endl;
+                            //nmolty2++;
+                            //cout<<"new:cors2_array:"<<cors2_array[nmolty2 - 1][0]<<" "<<cors2_array[nmolty2 - 1][1]<<" "<<cors2_array[nmolty2 - 1][2]<<endl;
 
                             //free_2D_array(cors2_array,nmolty2);
                             //double **cors2_array = convertVector2array(cors2);
-
+                            nmolty2++;
 
                             //从cors1_array中删除当前i粒子
+                            /*
                             vector<vector<double>>::iterator it;
                             it = cors1.begin();
                             int count = 0;
@@ -589,12 +697,22 @@ int main() {
                                 it++;
                                 count++;
                             }
-                            it++;
+
                             cors1.erase(it);
-                            cors1_array = convertVector2array(cors1);
+                             */
+                            cors1.erase(cors1.begin()+i);
+                            cors1.resize(nmolty1 - 1);
+
+                            //free_2D_array(cors1_array,nmolty1);
+
+                            //double **cors1_array = convertVector2array(cors1);
                             //free_2D_array(cors1_array,nmolty1);
                             //double **cors1_array = convertVector2array(cors1);
                             nmolty1--;
+
+                            //cout<<"cors1 size:"<<cors1.size()<<endl;
+                            //cout<<"cors2 size:"<<cors2.size()<<endl;
+
 
                             total1.pot = total1.pot - partial_old.pot;
                             total2.pot = total2.pot + partial_new.pot;
@@ -609,6 +727,7 @@ int main() {
                 }
 
             }
+
             else
             {
                 //try swapping 2->1
@@ -632,15 +751,22 @@ int main() {
                     //box1中需要删去的坐标必须是已经在box1中的坐标，但是新插入box2的坐标是任意的（因为插入任意位置）
 
                     //debug
+
                     cout<<"cors2_array:"<<cors2_array[i][0]<<" "<<cors2_array[i][1]<<" "<<cors2_array[i][2]<<endl;
                     cout<<"ri:"<<ri[0]<<" "<<ri[1]<<" "<<ri[2]<<endl;
                     cout<<"i:"<<i<<endl;
 
 
-                    partial_old = PotentialType::potential_1(cors2_array[i],box_length,r_cut,cors2_array,nmolty2);
-                    //if(!partial_old.ovr) throw "Overlap on particle removal";
+                    //partial_old = PotentialType::potential_1(cors2_array[i],box_length,r_cut,cors2_array,nmolty2);
+                    partial_old = PotentialType::potential_1_vec(cors2[i], box_length, r_cut, cors2, nmolty2);
+                    if(partial_old.ovr)
+                    {
+                        cout<<"Overlap on particle removal";
+                        continue;
+                    }
 
-                    partial_new = PotentialType::potential_1(ri,box_length,r_cut,cors1_array,nmolty1);
+                    //partial_new = PotentialType::potential_1(ri,box_length,r_cut,cors1_array,nmolty1);
+                    partial_new = PotentialType::potential_1_vec(ri,box_length,r_cut,cors1,nmolty1);
                     //cout<<"work"<<endl;
                     cout<<"box2：partial_old:"<<partial_old.pot<<endl;
                     cout<<"box2：partial_new:"<<partial_new.pot<<endl;
@@ -654,23 +780,28 @@ int main() {
                         if(metropolis(delta))
                         {
                             //ri的三个坐标用push_back推入二维向量vector cors1中
+                            //nmolty1++;
+                            cors1.resize(nmolty1 + 1);
+                            //cout<<"nmolty1:"<<nmolty1<<endl;
+                            cout<<"cors1 size:"<<cors1.size()<<endl;
                             cors1[nmolty1].push_back(ri[0]);
                             cors1[nmolty1].push_back(ri[1]);
                             cors1[nmolty1].push_back(ri[2]);
 
-
+                            cout<<"cors1:"<<cors1[nmolty1][0]<<" "<<cors1[nmolty1][1]<<" "<<cors1[nmolty1][2]<<endl;
 
 
                             //先记录原来的二维数组位置，防止野指针情况，试试
                             //curr = *cors2_array;
 
-                            cors1_array= convertVector2array(cors1);
+                            //cors1_array= convertVector2array(cors1);
 
                             //free_2D_array(cors2_array,nmolty2);
                             //double **cors2_array = convertVector2array(cors2);
                             nmolty1++;
 
                             //从cors1_array中删除当前i粒子
+                            /*
                             vector<vector<double>>::iterator it;
                             it = cors2.begin();
                             int count = 0;
@@ -680,12 +811,16 @@ int main() {
                                 count++;
                             }
                             it++;
-                            cors2.erase(it);
-                            cors2_array = convertVector2array(cors2);
-                            //free_2D_array(cors1_array,nmolty1);
+                             */
+                            cors2.erase(cors2.begin()+i);
+                            cors2.resize(nmolty2 - 1);
+                            //cors2_array = convertVector2array(cors2);
+                            //free_2D_array(cors1_array,nmolty1);;;;
                             //double **cors1_array = convertVector2array(cors1);
                             nmolty2--;
 
+                           // cout<<"cors1 size:"<<cors1.size()<<endl;
+                            //cout<<"cors2 size:"<<cors2.size()<<endl;
                             total1.pot = total1.pot - partial_old.pot;
                             total2.pot = total2.pot + partial_new.pot;
                             x21_acc = x21_acc + 1;
@@ -694,71 +829,41 @@ int main() {
 
                         }
                     }
-                    /*
-                    random_device seed_device;
-                    default_random_engine  engine;
-                    engine.seed(seed_device());
-                    uniform_int_distribution<int> distr(0, nmolty2);
 
-                    //随机选择box1中的任意一个粒子
-                    int i = distr(engine);
-                    cout<<"cors1_array:"<<cors1_array[i][0]<<" "<<cors1_array[i][1]<<" "<<cors1_array[i][2]<<endl;
-                    cout<<"ri:"<<ri[0]<<" "<<ri[1]<<" "<<ri[2]<<endl;
-
-                    cout<<"i:"<<i<<endl;
-                    partial_old = PotentialType::potential_1(cors2_array[i],box_length,r_cut,cors2_array,nmolty2);
-                    //if(!partial_old.ovr) throw "Overlap on particle removal";
-
-                    partial_new = PotentialType::potential_1(ri,box_length,r_cut,cors2_array,nmolty2);
-                    cout<<"box2：partial_old:"<<partial_old.pot<<endl;
-                    cout<<"box2：partial_new:"<<partial_new.pot<<endl;
-
-                    if(!partial_new.ovr)
-                    {
-                        delta = (partial_new.pot - partial_old.pot) / temperature;
-                        delta = delta - log(pow(box_length,3)/(nmolty1 + 1));
-                        delta = delta + log(pow(box_length,3) / nmolty2);
-
-                        if(metropolis(delta))
-                        {
-                            //ri的三个坐标用push_back推入二维向量vector cors1中
-                            cors1[nmolty2].push_back(ri[0]);
-                            cors1[nmolty2].push_back(ri[1]);
-                            cors1[nmolty2].push_back(ri[2]);
-
-                            //先释放原来的cors1_array的内存，在把新的cors1 vector转换成增加了一行数据后的数组
-                            free_2D_array(cors1_array,nmolty1);
-                            double **cors1_array = convertVector2array(cors1);
-                            nmolty1++;
-
-                            //从cors2_array中删除当前i粒子
-                            vector<vector<double>>::iterator it;
-                            it = cors2.begin();
-                            int count = 0;
-                            while(count != i)
-                            {
-                                it++;
-                                count++;
-                            }
-                            cors2.erase(it);
-
-                            free_2D_array(cors2_array,nmolty2);
-                            double **cors2_array = convertVector2array(cors2);
-                            nmolty2--;
-
-                            total1.pot = total1.pot - partial_old.pot;
-                            total2.pot = total2.pot + partial_new.pot;
-                            x21_acc = x21_acc + 1;
-                            cout<<"x21_acc"<<x21_acc<<endl;
-
-
-                        }
-                    }
-                */
                 }
             }
 
+
         }
+
+        //free_2D_array(cors1_array,nmolty1);
+        //double** cors1_array = convertVector2array(cors1);
+        //free_2D_array(cors2_array,nmolty2);
+        //double** cors2_array = convertVector2array(cors2);
+
+        //cout<<"cors1_array:"<<cors1_array[0][0]<<" "<<cors1_array[0][1]<<" "<<cors1_array[0][2]<<endl;
+        //cout<<"cors2_array:"<<cors2_array[0][0]<<" "<<cors2_array[0][1]<<" "<<cors2_array[0][2]<<endl;
+
+        //display
+        /*
+        for(int i = 0; i < nmolty1; i++)
+        {
+            for(int j = 0; j < 3;j++)
+            {
+                cout<<cors1_array[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+
+        for(int i = 0; i < nmolty2; i++)
+        {
+            for(int j = 0; j < 3;j++)
+            {
+                cout<<cors2_array[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    */
 
         if(x12_try > 0)
             x12_ratio = x12_acc/x12_try;
@@ -771,9 +876,13 @@ int main() {
         else x21_ratio = 0.0;
         cout<<"x21_ratio:"<<x21_ratio<<endl;
 
+        //volume move
+
+
+
     }
 
-        //volume move
+
 
 
         free_2D_array(atoms1_array,nmolty1);
