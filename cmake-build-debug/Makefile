@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-luban_vector_refactoring.o: luban_vector_refactoring.cpp.o
-.PHONY : luban_vector_refactoring.o
+potential_debug.o: potential_debug.cpp.o
+.PHONY : potential_debug.o
 
 # target to build an object file
-luban_vector_refactoring.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.o
-.PHONY : luban_vector_refactoring.cpp.o
+potential_debug.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o
+.PHONY : potential_debug.cpp.o
 
-luban_vector_refactoring.i: luban_vector_refactoring.cpp.i
-.PHONY : luban_vector_refactoring.i
+potential_debug.i: potential_debug.cpp.i
+.PHONY : potential_debug.i
 
 # target to preprocess a source file
-luban_vector_refactoring.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.i
-.PHONY : luban_vector_refactoring.cpp.i
+potential_debug.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.i
+.PHONY : potential_debug.cpp.i
 
-luban_vector_refactoring.s: luban_vector_refactoring.cpp.s
-.PHONY : luban_vector_refactoring.s
+potential_debug.s: potential_debug.cpp.s
+.PHONY : potential_debug.s
 
 # target to generate assembly for a file
-luban_vector_refactoring.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.s
-.PHONY : luban_vector_refactoring.cpp.s
+potential_debug.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.s
+.PHONY : potential_debug.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... luban_vector_refactoring.o"
-	@echo "... luban_vector_refactoring.i"
-	@echo "... luban_vector_refactoring.s"
+	@echo "... potential_debug.o"
+	@echo "... potential_debug.i"
+	@echo "... potential_debug.s"
 .PHONY : help
 
 

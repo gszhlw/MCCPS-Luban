@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MCCPS_luban.dir/luban_vector_refactoring.cpp.o"
+  "CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o"
   "MCCPS_luban"
   "MCCPS_luban.pdb"
 )
