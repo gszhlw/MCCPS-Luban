@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-potential_debug.o: potential_debug.cpp.o
-.PHONY : potential_debug.o
+metropolis.o: metropolis.cpp.o
+.PHONY : metropolis.o
 
 # target to build an object file
-potential_debug.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o
-.PHONY : potential_debug.cpp.o
+metropolis.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o
+.PHONY : metropolis.cpp.o
 
-potential_debug.i: potential_debug.cpp.i
-.PHONY : potential_debug.i
+metropolis.i: metropolis.cpp.i
+.PHONY : metropolis.i
 
 # target to preprocess a source file
-potential_debug.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.i
-.PHONY : potential_debug.cpp.i
+metropolis.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.i
+.PHONY : metropolis.cpp.i
 
-potential_debug.s: potential_debug.cpp.s
-.PHONY : potential_debug.s
+metropolis.s: metropolis.cpp.s
+.PHONY : metropolis.s
 
 # target to generate assembly for a file
-potential_debug.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.s
-.PHONY : potential_debug.cpp.s
+metropolis.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.s
+.PHONY : metropolis.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... potential_debug.o"
-	@echo "... potential_debug.i"
-	@echo "... potential_debug.s"
+	@echo "... metropolis.o"
+	@echo "... metropolis.i"
+	@echo "... metropolis.s"
 .PHONY : help
 
 

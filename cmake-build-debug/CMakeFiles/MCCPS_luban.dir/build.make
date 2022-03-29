@@ -66,27 +66,27 @@ include CMakeFiles/MCCPS_luban.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/MCCPS_luban.dir/flags.make
 
-CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o: CMakeFiles/MCCPS_luban.dir/flags.make
-CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o: ../potential_debug.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o -c "/Users/zlw/CLionProjects/MCCPS luban/potential_debug.cpp"
+CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o: CMakeFiles/MCCPS_luban.dir/flags.make
+CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o: ../metropolis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o -c "/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp"
 
-CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/zlw/CLionProjects/MCCPS luban/potential_debug.cpp" > CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.i
+CMakeFiles/MCCPS_luban.dir/metropolis.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MCCPS_luban.dir/metropolis.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp" > CMakeFiles/MCCPS_luban.dir/metropolis.cpp.i
 
-CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/zlw/CLionProjects/MCCPS luban/potential_debug.cpp" -o CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.s
+CMakeFiles/MCCPS_luban.dir/metropolis.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MCCPS_luban.dir/metropolis.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp" -o CMakeFiles/MCCPS_luban.dir/metropolis.cpp.s
 
 # Object files for target MCCPS_luban
 MCCPS_luban_OBJECTS = \
-"CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o"
+"CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o"
 
 # External object files for target MCCPS_luban
 MCCPS_luban_EXTERNAL_OBJECTS =
 
-MCCPS_luban: CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o
+MCCPS_luban: CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o
 MCCPS_luban: CMakeFiles/MCCPS_luban.dir/build.make
 MCCPS_luban: CMakeFiles/MCCPS_luban.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable MCCPS_luban"

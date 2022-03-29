@@ -1,21 +1,15 @@
-//
-// Created by 张力文 on 2021/12/8.
-//
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
-#include "config_io.h"
-
-using namespace std;
-#define Kb 1.3806488e-23
-//用来实现原子、分子构型I/O的例程
-
-int main()
+#include<stdio.h>
+/*
+ * 给出一个不多于5位的整数，要求 1、求出它是几位数 2、分别输出每一位数字 3、按逆序输出各位数字，例如原数为321,应输出123
+ * 输入一个不大于5位的数字
+ * 输出 三行 第一行 位数 第二行 用空格分开的每个数字，注意最后一个数字后没有空格 第三行 按逆序输出这个数
+ */
+int main(void)
 {
-    double temperature = 1.0;
-    double epsilon = Kb*temperature/0.85;
-    cout<<"epsilon:"<<epsilon<<endl;
+    int i = 0, j = -2, a = 6;
+    if((++i>0) || (++j>0)) a++;
+    printf("%d %d %d",i,j,a);
     return 0;
-}
 
+
+}

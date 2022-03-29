@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/zlw/CLionProjects/MCCPS luban/potential_debug.cpp" "/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles/MCCPS_luban.dir/potential_debug.cpp.o"
+  "/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp" "/Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug/CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

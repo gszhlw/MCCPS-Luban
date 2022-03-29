@@ -6,21 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/zlw/CLionProjects/MCCPS luban/potential_debug.cpp
-vector
+/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp
+cstdio
 -
-string
+cstdlib
 -
-fstream
+cmath
 -
-iostream
+cstdio
 -
-math.h
+cstdlib
 -
-random
--
-algorithm
--
-iomanip
+cmath
 -
 
