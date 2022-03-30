@@ -6,17 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/Users/zlw/CLionProjects/MCCPS luban/metropolis.cpp
+/Users/zlw/CLionProjects/MCCPS luban/input_test.cpp
+vector
+-
+string
+-
+fstream
+-
+iostream
+-
+stdlib.h
+-
 cstdio
 -
-cstdlib
+math.h
 -
-cmath
+random
 -
-cstdio
+algorithm
 -
-cstdlib
--
-cmath
+iomanip
 -
 

@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-metropolis.o: metropolis.cpp.o
-.PHONY : metropolis.o
+input_test.o: input_test.cpp.o
+.PHONY : input_test.o
 
 # target to build an object file
-metropolis.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.o
-.PHONY : metropolis.cpp.o
+input_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.o
+.PHONY : input_test.cpp.o
 
-metropolis.i: metropolis.cpp.i
-.PHONY : metropolis.i
+input_test.i: input_test.cpp.i
+.PHONY : input_test.i
 
 # target to preprocess a source file
-metropolis.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.i
-.PHONY : metropolis.cpp.i
+input_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.i
+.PHONY : input_test.cpp.i
 
-metropolis.s: metropolis.cpp.s
-.PHONY : metropolis.s
+input_test.s: input_test.cpp.s
+.PHONY : input_test.s
 
 # target to generate assembly for a file
-metropolis.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/metropolis.cpp.s
-.PHONY : metropolis.cpp.s
+input_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.s
+.PHONY : input_test.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... metropolis.o"
-	@echo "... metropolis.i"
-	@echo "... metropolis.s"
+	@echo "... input_test.o"
+	@echo "... input_test.i"
+	@echo "... input_test.s"
 .PHONY : help
 
 

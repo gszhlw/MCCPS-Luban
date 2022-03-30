@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define Kb 1.3806488e-23
+#define Kb 1.987206504191549E-003
 
 class PotentialType{
 public:
@@ -287,10 +287,10 @@ int main() {
         {
             atoms1[i][j]= *it++;
 
-           // cout<<atoms1[i][j]<<' ';
+           cout<<atoms1[i][j]<<' ';
 
         }
-        //cout<<endl;
+        cout<<endl;
     }
 
     for(int i =0; i < nmolty1;i++)
@@ -298,10 +298,10 @@ int main() {
         for(int j = 0; j < cors1[0].size(); j++)
         {
             cors1[i][j] = atoms1[i][j+1];
-            //cout<<setprecision(9)<<cors1[i][j]<<' ';
+            cout<<setprecision(9)<<cors1[i][j]<<' ';
 
         }
-       // cout<<endl;
+        cout<<endl;
     }
 
 
