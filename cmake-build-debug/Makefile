@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-input_test.o: input_test.cpp.o
-.PHONY : input_test.o
+luban_reduced_units_test.o: luban_reduced_units_test.cpp.o
+.PHONY : luban_reduced_units_test.o
 
 # target to build an object file
-input_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.o
-.PHONY : input_test.cpp.o
+luban_reduced_units_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.o
+.PHONY : luban_reduced_units_test.cpp.o
 
-input_test.i: input_test.cpp.i
-.PHONY : input_test.i
+luban_reduced_units_test.i: luban_reduced_units_test.cpp.i
+.PHONY : luban_reduced_units_test.i
 
 # target to preprocess a source file
-input_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.i
-.PHONY : input_test.cpp.i
+luban_reduced_units_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.i
+.PHONY : luban_reduced_units_test.cpp.i
 
-input_test.s: input_test.cpp.s
-.PHONY : input_test.s
+luban_reduced_units_test.s: luban_reduced_units_test.cpp.s
+.PHONY : luban_reduced_units_test.s
 
 # target to generate assembly for a file
-input_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/input_test.cpp.s
-.PHONY : input_test.cpp.s
+luban_reduced_units_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.s
+.PHONY : luban_reduced_units_test.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... input_test.o"
-	@echo "... input_test.i"
-	@echo "... input_test.s"
+	@echo "... luban_reduced_units_test.o"
+	@echo "... luban_reduced_units_test.i"
+	@echo "... luban_reduced_units_test.s"
 .PHONY : help
 
 

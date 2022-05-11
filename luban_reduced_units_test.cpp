@@ -8,47 +8,60 @@
  * 原始程序中的原子数和盒子尺寸是给定的，需要做一定的修改
  * 输出：每1000次移动输出move, total_energy, naccept, nreject
  *      每10000次移动输出一次pdf文件
+ *
+ * 2022.5.10新修改：
+ * 将输入坐标从二维vector改回静态数组，并且将其大小初始化为1000
+ * 连同其他函数的形参类型也改回二维数组
+ *
+ * 2022.5.11新修改：
+ * 约化单位更改：
+ * （1）使用的是Ar的epsilon和sigma值
+ * （2）对于给定初始构型的case（如N=30，L=8，根据LJ MC网站的基准值表格，调整L=11）
+ * （3）根据T* = 0.85， rho* = 0.009，得出T=120
+ * （4）加入截断判断r_cut = 3*sigma （os：前后的能量可视化后并看不到很大的差别……）
+ * （5）能量的平均值计算
+ *
  */
-
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <iostream>
+#include <chrono>
+#include <vector>
+#include <fstream>
 
 using namespace std;
 
 // Set the number of atoms in the box
-const int n_atoms = 500;
+const int n_atoms = 30;
 
 // Set the number of Monte Carlo moves to perform
-const int num_moves = 50000000;
+const int num_moves = 500000;
 
 // Set the size of the box (in Angstroms)
-const double box_size[3] = { 1000.0, 1000.0, 1000.0 };
-const double box_length = 1000.0;
+//const double box_size[3] = { 15.0, 15.0, 15.0 };
+const double box_size[3] = { 11.0, 11.0, 11.0 };
+
 // The maximum amount that the atom can be translated by
-//const double max_translate = 0.5;  // angstroms
-//const double max_translate = 10;  // angstroms
-const double max_translate = 50;
+const double max_translate = 0.5;  // angstroms
+
 // Simulation temperature
-const double temperature = 298.15;   // kelvin
-
-const double k_boltz = 1.987206504191549E-003;  // kcal mol-1 K-1
-
-const double kT = k_boltz * temperature;
-//const double T_reduced= 0.85;
+//const double temperature = 298.15;   // kelvin
+const double temperature = 102;
 
 // Give the Lennard Jones parameters for the atoms
 // (these are the OPLS parameters for Krypton)
 //const double sigma = 3.624;     // angstroms
-const double sigma = 0.125992105;
-//const double rho_reduced = 1.00E-03;
-//const double rho = n_atoms / box_length;
-
-//const double sigma_3 = rho_reduced/rho;
-//const double sigma = pow(sigma_3,(1.0/3));
 //const double epsilon = 0.317;   // kcal mol-1
-const double epsilon = 0.697041905;
-//const double epsilon = kT / T_reduced;
+
+const double k_boltz = 1.987206504191549E-003;
+
+//Ar    T* = 0.85   rho*=0.009
+
+const double sigma = 3.41;
+const double epsilon_boltz = 120;
+const double epsilon = epsilon_boltz*k_boltz;
+const double r_cut = 3 * sigma;
 
 // function to return a random number between 'start' to 'end'
 double rand(const double start, const double end)
@@ -75,8 +88,7 @@ double make_periodic(double x, const double box)
 // Subroutine to wrap the coordinates into a box
 double wrap_into_box(double x, double box)
 {
-    //while (x > box)
-    while(x > box)
+    while (x > box)
     {
         x = x - box;
     }
@@ -90,8 +102,8 @@ double wrap_into_box(double x, double box)
 }
 
 // Subroutine to print a PDB of the coordinates
-/*
-void print_pdb(double **coords, const int n_atoms, const int move)
+void print_pdb(double coords[][3] , const int n_atoms, const int move)
+//void print_pdb(vector<vector<double>> &coords, const int n_atoms, const int move)
 {
     char filename[128];
 
@@ -111,18 +123,19 @@ void print_pdb(double **coords, const int n_atoms, const int move)
 
     fclose(f);
 }
-*/
+
 // Subroutine that calculates the energies of the atoms
-double calculate_energy(double **coords, const int n_atoms, const double *box_size,
-                        const double sigma, const double epsilon)
+double calculate_energy(double coords[][3], const int n_atoms, const double *box_size,
+                        const double sigma, const double epsilon,const double r_cut)
+//double calculate_energy(vector<vector<double>>& coords, const int n_atoms, const double *box_size,
+//                        const double sigma, const double epsilon)
 {
     // Loop over all pairs of atoms and calculate
     // the LJ energy
     double total_energy = 0;
-    //const double r_cut = 3 * sigma;
-    const double r_cut = 2.5;
-    const double r_cut_box = r_cut/box_length;
-    const double r_cut_box_sq = pow(r_cut_box,2);
+    double r_cut_box = r_cut / box_size[0];
+    double r_cut__box_sq = r_cut_box * r_cut_box;
+    double r_cut_sq = r_cut * r_cut;
 
     for (int i = 0; i < n_atoms-1; i = i + 1)
     {
@@ -137,40 +150,43 @@ double calculate_energy(double **coords, const int n_atoms, const double *box_si
             delta_y = make_periodic(delta_y, box_size[1]);
             delta_z = make_periodic(delta_z, box_size[2]);
 
-            const double r2 = (delta_x*delta_x) + (delta_y*delta_y) +
+            //const double r2 = (delta_x*delta_x) + (delta_y*delta_y) +
+            //                  (delta_z*delta_z);
+            double r2 = (delta_x*delta_x) + (delta_y*delta_y) +
                               (delta_z*delta_z);
-
-           // if(r2 < r_cut_box_sq)
-           // {
+            if(r2 < r_cut_sq)
+            {
                 // E_LJ = 4*epsilon[ (sigma/r)^12 - (sigma/r)^6 ]
-
                 const double sig2_over_r2 = (sigma*sigma) / r2;
                 const double sig6_over_r6 = sig2_over_r2*sig2_over_r2*sig2_over_r2;
                 const double sig12_over_r12 = sig6_over_r6 * sig6_over_r6;
 
+                //const double e_lj = 4.0 * epsilon * ( sig12_over_r12 - sig6_over_r6 );
 
+                //约化单位之后的能量计算公式
+                const double e_lj = 4.0 * epsilon * ( sig12_over_r12 - sig6_over_r6 );
+                total_energy = total_energy + e_lj;
+            }
 
-
-
-            // E_LJ = 4*epsilon[ (sigma/r)^12 - (sigma/r)^6 ]
-            /*
-            const double sig2_over_r2 = (sigma*sigma) / r2;
-            const double sig6_over_r6 = sig2_over_r2*sig2_over_r2*sig2_over_r2;
-            const double sig12_over_r12 = sig6_over_r6 * sig6_over_r6;
-            */
-            //const double e_lj = 4.0 * epsilon * ( sig12_over_r12 - sig6_over_r6 );
-            //const double e_ij_reduced = e_lj/epsilon;
-            const double e_lj = 4.0 * ( sig12_over_r12 - sig6_over_r6 );
-            total_energy = total_energy + e_lj;
-           // }
+//            // E_LJ = 4*epsilon[ (sigma/r)^12 - (sigma/r)^6 ]
+//            const double sig2_over_r2 = (sigma*sigma) / r2;
+//            const double sig6_over_r6 = sig2_over_r2*sig2_over_r2*sig2_over_r2;
+//            const double sig12_over_r12 = sig6_over_r6 * sig6_over_r6;
+//
+//            const double e_lj = 4.0 * epsilon * ( sig12_over_r12 - sig6_over_r6 );
+//
+//            //约化单位之后的能量计算公式
+//            //const double e_lj = 4.0 * ( sig12_over_r12 - sig6_over_r6 );
+//            total_energy = total_energy + e_lj;
         }
     }
 
     // return the total energy of the atoms
-    return total_energy;
+    return total_energy * epsilon;
 }
 
-void copy_coordinates(double **from, double **to)
+void copy_coordinates(double from[][3], double to[][3])
+//void copy_coordinates(vector<vector<double>>& from, vector<vector<double>>& to)
 {
     for (int i=0; i<n_atoms; ++i)
     {
@@ -180,16 +196,90 @@ void copy_coordinates(double **from, double **to)
     }
 }
 
+int CountLines(char *filename)
+{
+    ifstream ReadFile;
+    int n=0;
+    string tmp;
+    ReadFile.open(filename,ios::in);//ios::in 表示以只读的方式读取文件
+    if(ReadFile.fail())//文件打开失败:返回0
+    {
+        return 0;
+    }
+    else//文件存在
+    {
+        while(getline(ReadFile,tmp,'\n'))
+        {
+            n++;
+        }
+        ReadFile.close();
+        return n;
+    }
+}
+
+
 int main(int argc, const char **argv)
 {
-    double **coords = new double*[n_atoms];
-    double **old_coords = new double*[n_atoms];
 
-    // Randomly generate the coordinates of the atoms in the box
+
+    chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+
+    double coords[1000][3] = {0.0};
+    //double **coords1 = new double*[1000];
+
+    double old_coords[1000][3] = {0.0};
+    //double **old_coords1 = new double*[1000];
+
+    //vector<vector<double>> coords(n_atoms, vector<double>(3));
+    //vector<vector<double>> old_coords(n_atoms, vector<double>(3));
+
+    /*
     for (int i = 0; i < n_atoms; i = i + 1)
     {
-        coords[i] = new double[3];
-        old_coords[i] = new double[3];
+        coords1[i] = new double[3];
+        old_coords1[i] = new double[3];
+    }
+     */
+
+    ifstream file;
+    int LINES;
+    char filename[512]="input_box.txt";
+    file.open(filename,ios::in);
+
+    if(file.fail())
+    {
+        cout<<"文件不存在."<<endl;
+        file.close();
+    }
+    else//文件存在
+    {
+        LINES = CountLines(filename);
+        cout << "The number of lines is:" << LINES<< endl;
+
+        int cols = 3;
+
+        while (!file.eof()) //读取数据到数组
+        {
+            for (int i = 0; i < LINES; ++i)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    file >> coords[i][j];
+                    //cout << coords[i][j] << ' ';
+                }
+                //cout << endl;
+            }
+        }
+        file.close(); //关闭文件
+    }
+
+
+    // Randomly generate the coordinates of the atoms in the box
+    /*
+    for (int i = 0; i < n_atoms; i = i + 1)
+    {
+       // coords[i] = new double[3];
+        //old_coords[i] = new double[3];
 
         // Note "rand(0,x)" would generate a random number
         // between 0 and $x
@@ -197,11 +287,12 @@ int main(int argc, const char **argv)
         coords[i][1] = rand(0, box_size[1]);
         coords[i][2] = rand(0, box_size[2]);
     }
+     */
 
     // calculate kT
-//    const double k_boltz = 1.987206504191549E-003;  // kcal mol-1 K-1
+    //const double k_boltz = 1.987206504191549E-003;  // kcal mol-1 K-1
 
-//    const double kT = k_boltz * temperature;
+    const double kT = k_boltz * temperature;
 
     // The total number of accepted moves
     int naccept = 0;
@@ -210,12 +301,12 @@ int main(int argc, const char **argv)
     int nreject = 0;
 
     // Print the initial PDB file
-    //print_pdb(coords, n_atoms, 0);
+    print_pdb(coords, n_atoms, 0);
 
     for (int move=1; move<=num_moves; move = move + 1)
     {
         // calculate the old energy
-        const double old_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon);
+        const double old_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon,r_cut);
 
         // Pick a random atom
         int atom = int( rand(0, n_atoms) );
@@ -238,7 +329,7 @@ int main(int argc, const char **argv)
         coords[atom][2] = wrap_into_box(coords[atom][2], box_size[2]);
 
         // calculate the new energy
-        const double new_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon);
+        const double new_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon,r_cut);
 
         bool accept = false;
 
@@ -264,6 +355,8 @@ int main(int argc, const char **argv)
         }
 
         double total_energy = 0;
+        double total_energy_avg = 0;
+        double total_energy_sum = 0;
 
         if (accept)
         {
@@ -282,10 +375,17 @@ int main(int argc, const char **argv)
             total_energy = old_energy;
         }
 
-        // print the energy every 1000 moves
-        if (move % 10000 == 0)
+        //能量平均值计算
+        if(move > 5000)
         {
-            printf("%d %e  %d  %d\n", move, total_energy, naccept, nreject);
+            total_energy_sum += total_energy;
+            total_energy_avg = total_energy_sum / (move - 5000);
+        }
+
+        // print the energy every 1000 moves
+        if (move % 1000 == 0)
+        {
+            printf("%d %f  %f %d  %d\n", move, total_energy, total_energy_avg, naccept, nreject);
         }
 
         // print the coordinates every 10000 moves
@@ -296,6 +396,14 @@ int main(int argc, const char **argv)
         }
          */
     }
+
+
+    chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+
+    chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+
+    cout << "run time = " << time_used.count() << " seconds. " << endl;
+
 
     return 0;
 }

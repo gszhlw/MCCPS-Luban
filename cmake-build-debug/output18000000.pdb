@@ -1,0 +1,51 @@
+CRYST1   11.343   11.343   11.343  90.00  90.00  90.00
+ATOM      1  Kr   Kr     1       5.454   9.615   1.231  1.00  0.00          Kr
+TER
+ATOM      2  Kr   Kr     1       7.850  10.175   9.544  1.00  0.00          Kr
+TER
+ATOM      3  Kr   Kr     1       9.677   4.204   6.490  1.00  0.00          Kr
+TER
+ATOM      4  Kr   Kr     1       1.912   7.716   0.980  1.00  0.00          Kr
+TER
+ATOM      5  Kr   Kr     1       9.371   6.278  10.367  1.00  0.00          Kr
+TER
+ATOM      6  Kr   Kr     1       1.011   2.415   8.537  1.00  0.00          Kr
+TER
+ATOM      7  Kr   Kr     1       1.756   4.124   0.480  1.00  0.00          Kr
+TER
+ATOM      8  Kr   Kr     1       5.088   2.156  11.301  1.00  0.00          Kr
+TER
+ATOM      9  Kr   Kr     1       4.412  10.795   7.666  1.00  0.00          Kr
+TER
+ATOM     10  Kr   Kr     1       9.201   8.031   6.128  1.00  0.00          Kr
+TER
+ATOM     11  Kr   Kr     1      10.521   5.375   2.856  1.00  0.00          Kr
+TER
+ATOM     12  Kr   Kr     1       0.991   0.552   2.109  1.00  0.00          Kr
+TER
+ATOM     13  Kr   Kr     1       1.168   7.954   4.698  1.00  0.00          Kr
+TER
+ATOM     14  Kr   Kr     1       5.381   8.376   4.892  1.00  0.00          Kr
+TER
+ATOM     15  Kr   Kr     1       1.518   6.598   8.632  1.00  0.00          Kr
+TER
+ATOM     16  Kr   Kr     1       5.274   6.686   9.686  1.00  0.00          Kr
+TER
+ATOM     17  Kr   Kr     1       8.476   0.639   5.861  1.00  0.00          Kr
+TER
+ATOM     18  Kr   Kr     1       6.032   4.912   2.372  1.00  0.00          Kr
+TER
+ATOM     19  Kr   Kr     1       4.879   1.260   4.005  1.00  0.00          Kr
+TER
+ATOM     20  Kr   Kr     1       5.503   3.226   7.678  1.00  0.00          Kr
+TER
+ATOM     21  Kr   Kr     1       1.113  10.224   9.807  1.00  0.00          Kr
+TER
+ATOM     22  Kr   Kr     1       9.560   9.553   1.617  1.00  0.00          Kr
+TER
+ATOM     23  Kr   Kr     1       0.886   0.051   6.131  1.00  0.00          Kr
+TER
+ATOM     24  Kr   Kr     1       9.083   2.336  10.733  1.00  0.00          Kr
+TER
+ATOM     25  Kr   Kr     1       2.593   4.337   5.112  1.00  0.00          Kr
+TER

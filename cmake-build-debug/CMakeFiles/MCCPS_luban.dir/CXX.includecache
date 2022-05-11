@@ -6,25 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/zlw/CLionProjects/MCCPS luban/input_test.cpp
-vector
+/Users/zlw/CLionProjects/MCCPS luban/luban_reduced_units_test.cpp
+cstdio
 -
-string
+cstdlib
 -
-fstream
+cmath
 -
 iostream
 -
-stdlib.h
+chrono
 -
-cstdio
+vector
 -
-math.h
--
-random
--
-algorithm
--
-iomanip
+fstream
 -
 

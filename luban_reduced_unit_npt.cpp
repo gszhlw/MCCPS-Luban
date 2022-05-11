@@ -5,6 +5,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <chrono>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -75,7 +78,8 @@ double wrap_into_box(double x, double box)
 }
 
 // Subroutine to print a PDB of the coordinates
-void print_pdb(double **coords, const int n_atoms, const int move)
+//void print_pdb(double **coords, const int n_atoms, const int move)
+void print_pdb(vector<vector<double>>& coords, const int n_atoms, const int move)
 {
     char filename[128];
 
@@ -97,7 +101,9 @@ void print_pdb(double **coords, const int n_atoms, const int move)
 }
 
 // Subroutine that calculates the energies of the atoms
-double calculate_energy(double **coords, const int n_atoms, const double *box_size,
+//double calculate_energy(double **coords, const int n_atoms, const double *box_size,
+//                        const double sigma, const double epsilon)
+double calculate_energy(vector<vector<double>>& coords, const int n_atoms, const double *box_size,
                         const double sigma, const double epsilon)
 {
     // Loop over all pairs of atoms and calculate
@@ -135,7 +141,7 @@ double calculate_energy(double **coords, const int n_atoms, const double *box_si
     return total_energy;
 }
 
-void copy_coordinates(double **from, double **to)
+void copy_coordinates(vector<vector<double>>& from, vector<vector<double>>& to)
 {
     for (int i=0; i<n_atoms; ++i)
     {
@@ -147,14 +153,18 @@ void copy_coordinates(double **from, double **to)
 
 int main(int argc, const char **argv)
 {
-    double **coords = new double*[n_atoms];
-    double **old_coords = new double*[n_atoms];
+    chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+   // double **coords = new double*[n_atoms];
+   // double **old_coords = new double*[n_atoms];
+    vector<vector<double>> coords(n_atoms, vector<double>(3));
+    vector<vector<double>> old_coords(n_atoms, vector<double>(3));
+
 
     // Randomly generate the coordinates of the atoms in the box
     for (int i = 0; i < n_atoms; i = i + 1)
     {
-        coords[i] = new double[3];
-        old_coords[i] = new double[3];
+        //coords[i] = new double[3];
+        //old_coords[i] = new double[3];
 
         // Note "rand(0,x)" would generate a random number
         // between 0 and $x
@@ -334,6 +344,11 @@ int main(int argc, const char **argv)
             print_pdb(coords, n_atoms, move);
         }
     }
+    chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+
+    chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+
+    cout << "run time = " << time_used.count() << " seconds. " << endl;
 
     return 0;
 }
