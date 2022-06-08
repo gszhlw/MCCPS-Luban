@@ -1,4 +1,4 @@
-# MCCPS-Luban(Monte Carlo Complex Planetary Systems
+# MCCPS-Luban(Monte Carlo Complex Planetary Systems）
 # 蒙特卡洛复杂行星系统——鲁班
 
 
