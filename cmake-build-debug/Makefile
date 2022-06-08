@@ -129,29 +129,29 @@ MCCPS_luban/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/build
 .PHONY : MCCPS_luban/fast
 
-luban_reduced_units_test.o: luban_reduced_units_test.cpp.o
-.PHONY : luban_reduced_units_test.o
+luban_reduced_unit_npt.o: luban_reduced_unit_npt.cpp.o
+.PHONY : luban_reduced_unit_npt.o
 
 # target to build an object file
-luban_reduced_units_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.o
-.PHONY : luban_reduced_units_test.cpp.o
+luban_reduced_unit_npt.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_unit_npt.cpp.o
+.PHONY : luban_reduced_unit_npt.cpp.o
 
-luban_reduced_units_test.i: luban_reduced_units_test.cpp.i
-.PHONY : luban_reduced_units_test.i
+luban_reduced_unit_npt.i: luban_reduced_unit_npt.cpp.i
+.PHONY : luban_reduced_unit_npt.i
 
 # target to preprocess a source file
-luban_reduced_units_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.i
-.PHONY : luban_reduced_units_test.cpp.i
+luban_reduced_unit_npt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_unit_npt.cpp.i
+.PHONY : luban_reduced_unit_npt.cpp.i
 
-luban_reduced_units_test.s: luban_reduced_units_test.cpp.s
-.PHONY : luban_reduced_units_test.s
+luban_reduced_unit_npt.s: luban_reduced_unit_npt.cpp.s
+.PHONY : luban_reduced_unit_npt.s
 
 # target to generate assembly for a file
-luban_reduced_units_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_units_test.cpp.s
-.PHONY : luban_reduced_units_test.cpp.s
+luban_reduced_unit_npt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MCCPS_luban.dir/build.make CMakeFiles/MCCPS_luban.dir/luban_reduced_unit_npt.cpp.s
+.PHONY : luban_reduced_unit_npt.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MCCPS_luban"
-	@echo "... luban_reduced_units_test.o"
-	@echo "... luban_reduced_units_test.i"
-	@echo "... luban_reduced_units_test.s"
+	@echo "... luban_reduced_unit_npt.o"
+	@echo "... luban_reduced_unit_npt.i"
+	@echo "... luban_reduced_unit_npt.s"
 .PHONY : help
 
 

@@ -6,19 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/zlw/CLionProjects/MCCPS luban/luban_reduced_units_test.cpp
+/Users/zlw/CLionProjects/MCCPS luban/luban_reduced_unit_npt.cpp
 cstdio
 -
 cstdlib
 -
 cmath
 -
-iostream
--
 chrono
 -
-vector
+iostream
 -
-fstream
+vector
 -
 

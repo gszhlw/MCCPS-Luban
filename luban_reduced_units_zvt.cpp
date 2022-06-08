@@ -1,10 +1,11 @@
 //
-// Created by 张力文 on 2022/4/21.
+// Created by 张力文 on 2022/6/5.
 //
+
 /*
  * 2022.5.31
  * (1)NPT模拟需要给定压力值：0.01341956808
- *（2）8.50E-01	9.00E-011.5	5.27E-03	2.2314E+00	2.72E-02
+ *（2）8.50E-01	9.00E-01	-6.2391E+00	5.27E-03	2.2314E+00	2.72E-02
  * (3)标准的box：1,101.4394724361
  */
 #include <cstdio>
@@ -16,14 +17,21 @@
 
 using namespace std;
 
+
+//activity for particle creation
+const double activity = 0.079;
+
+//prob_move   prob_create = (1-prob_move)/2 # So that create and destroy have equal probabilities
+const double prob_move = 0.34;
+const double prob_create = (1-prob_move)/2;
 // Set the number of atoms in the box
-const int n_atoms = 500;
+const int n_atoms = 25;
 
 // Set the number of Monte Carlo moves to perform
 const int num_moves = 20000000;
 
 // Set the size of the box (in Angstroms)
-double box_size[3] = { 28.0, 28.0, 28.0 };
+double box_size[3] = { 10.0, 10.0, 10.0 };
 
 // The maximum amount that the atom can be translated by
 const double max_translate = 0.2;   // angstroms
@@ -238,11 +246,11 @@ void copy_coordinates(double from[][3], double to[][3])
 int main(int argc, const char **argv)
 {
     chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
-   // double **coords = new double*[n_atoms];
-   // double **old_coords = new double*[n_atoms];
+    // double **coords = new double*[n_atoms];
+    // double **old_coords = new double*[n_atoms];
     double coords[1000][3] = {0.0};
     double old_coords[1000][3] = {0.0};
-
+    double new_coords[3] = {0.0};
     //vector<vector<double>> coords(n_atoms, vector<double>(3));
     //vector<vector<double>> old_coords(n_atoms, vector<double>(3));
 
@@ -291,7 +299,7 @@ int main(int argc, const char **argv)
         const double old_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon,r_cut);
 
         // calculate the old volume of the box
-        const double V_old = box_size[0] * box_size[1] * box_size[2];
+        //const double V_old = box_size[0] * box_size[1] * box_size[2];
 
         // Pick a random atom
         int atom = int( rand(0, n_atoms) );
@@ -302,52 +310,11 @@ int main(int argc, const char **argv)
         // save the old box dimensions
         const double old_box_size[3] = { box_size[0], box_size[1], box_size[2] };
 
+        //记录应该将新创建的原子拷贝到原来构型坐标的第一维位置
+        int count = n_atoms;
         // Decide if we are performing an atom move, or a volume move
-        if (rand(0.0, 1.0) <= 1.0 / n_atoms)
-        {
-            // 1 in $n_atoms chance of being here. Perform a volume move
-            // by changing the volume for a random amount
-            double delta_vol = rand(-max_volume_change, max_volume_change);
-
-            double V_new = V_old + delta_vol;
-
-            // Volume is the cube of the box length, so add the cube root
-            // of this change onto the box size
-            double box_side = pow(V_new, 1.0/3.0);
-
-            // work out how much we need to scale the position of the atoms
-            double scale_ratio = std::pow( V_new / V_old, 1.0/3.0 );
-
-            // now translate every atom so that it is scaled from the center
-            // of the box
-            for (int i=0; i<n_atoms; ++i)
-            {
-                double dx = coords[i][0] - (0.5*box_size[0]);
-                double dy = coords[i][1] - (0.5*box_size[1]);
-                double dz = coords[i][2] - (0.5*box_size[2]);
-
-                double length = std::sqrt(dx*dx + dy*dy + dz*dz);
-
-                if (length > 0.01)   // don't scale atoms already near the center
-                {
-                    dx /= length;
-                    dy /= length;
-                    dz /= length;
-
-                    length *= scale_ratio;
-
-                    coords[i][0] = (0.5*box_size[0]) + dx * length;
-                    coords[i][1] = (0.5*box_size[1]) + dy * length;
-                    coords[i][2] = (0.5*box_size[2]) + dz * length;
-                }
-            }
-
-            // now update the new size of the box
-            box_size[0] = box_side;
-            box_size[1] = box_side;
-            box_size[2] = box_side;
-        }
-        else
+        //if (rand(0.0, 1.0) <= 1.0 / n_atoms)
+        if (rand(0.0, 1.0) <=  prob_move)//translation
         {
             // Make the move - translate by a delta in each dimension
             const double delta_x = rand(-max_translate, max_translate);
@@ -362,13 +329,86 @@ int main(int argc, const char **argv)
             coords[atom][0] = wrap_into_box(coords[atom][0], box_size[0]);
             coords[atom][1] = wrap_into_box(coords[atom][1], box_size[1]);
             coords[atom][2] = wrap_into_box(coords[atom][2], box_size[2]);
+
+             }
+        else if(rand(0.0, 1.0) < prob_move + prob_create) //create trial
+        {
+
+            //随机生成box范围内的一组坐标作为新create的原子坐标
+            new_coords[0] = rand(0, box_size[0]);
+            new_coords[1] = rand(0, box_size[0]);
+            new_coords[2] = rand(0, box_size[0]);
+
+            // wrap the coordinates back into the box
+            new_coords[0] = wrap_into_box(new_coords[0], box_size[0]);
+            new_coords[1] = wrap_into_box(new_coords[1], box_size[1]);
+            new_coords[2] = wrap_into_box(new_coords[2], box_size[2]);
+
+            //如何将该原子坐标加入原来的构型坐标二维数组中
+
+            coords[count++][0] = new_coords[0];
+            coords[count++][1] = new_coords[1];
+            coords[count++][2] = new_coords[2];
+
+            //更新n_atoms值
+            n_atoms = count;
+
+
+//            // 1 in $n_atoms chance of being here. Perform a volume move
+//            // by changing the volume for a random amount
+//            double delta_vol = rand(-max_volume_change, max_volume_change);
+//
+//            double V_new = V_old + delta_vol;
+//
+//            // Volume is the cube of the box length, so add the cube root
+//            // of this change onto the box size
+//            double box_side = pow(V_new, 1.0/3.0);
+//
+//            // work out how much we need to scale the position of the atoms
+//            double scale_ratio = std::pow( V_new / V_old, 1.0/3.0 );
+//
+//            // now translate every atom so that it is scaled from the center
+//            // of the box
+//            for (int i=0; i<n_atoms; ++i)
+//            {
+//                double dx = coords[i][0] - (0.5*box_size[0]);
+//                double dy = coords[i][1] - (0.5*box_size[1]);
+//                double dz = coords[i][2] - (0.5*box_size[2]);
+//
+//                double length = std::sqrt(dx*dx + dy*dy + dz*dz);
+//
+//                if (length > 0.01)   // don't scale atoms already near the center
+//                {
+//                    dx /= length;
+//                    dy /= length;
+//                    dz /= length;
+//
+//                    length *= scale_ratio;
+//
+//                    coords[i][0] = (0.5*box_size[0]) + dx * length;
+//                    coords[i][1] = (0.5*box_size[1]) + dy * length;
+//                    coords[i][2] = (0.5*box_size[2]) + dz * length;
+//                }
+//            }
+//
+//            // now update the new size of the box
+//            box_size[0] = box_side;
+//            box_size[1] = box_side;
+//            box_size[2] = box_side;
+
+
+
+        }
+        else//destroy trial
+        {
+
         }
 
         // calculate the new energy
         const double new_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon,r_cut);
 
         // calculate the new volume of the box
-        const double V_new = box_size[0] * box_size[1] * box_size[2];
+        //const double V_new = box_size[0] * box_size[1] * box_size[2];
 
         bool accept = false;
 
@@ -380,8 +420,8 @@ int main(int argc, const char **argv)
         else
         {
             // Now apply the Monte Carlo test - compare
-                // exp( -(E_new - E_old + P(V_new - V_old)) / kT
-                //             +  N ln (V_new - V_old) ) >= rand(0,1)
+            // exp( -(E_new - E_old + P(V_new - V_old)) / kT
+            //             +  N ln (V_new - V_old) ) >= rand(0,1)
             double x = exp( -((new_energy - old_energy + pressure * (V_new - V_old)) / kT)
                             + (n_atoms * (log(V_new) - log(V_old) )) );
 
@@ -449,12 +489,12 @@ int main(int argc, const char **argv)
         }
 
         // print the coordinates every 500000 moves
-      /*
-        if (move % 500000 == 0)
-        {
-            print_pdb(coords, n_atoms, move);
-        }
-        */
+        /*
+          if (move % 500000 == 0)
+          {
+              print_pdb(coords, n_atoms, move);
+          }
+          */
     }
     chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
 
