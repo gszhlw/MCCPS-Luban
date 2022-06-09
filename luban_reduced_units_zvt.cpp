@@ -25,7 +25,7 @@ const double activity = 0.079;
 const double prob_move = 0.34;
 const double prob_create = (1-prob_move)/2;
 // Set the number of atoms in the box
-const int n_atoms = 25;
+int n_atoms = 25;
 
 // Set the number of Monte Carlo moves to perform
 const int num_moves = 20000000;
@@ -250,6 +250,10 @@ int main(int argc, const char **argv)
     // double **old_coords = new double*[n_atoms];
     double coords[1000][3] = {0.0};
     double old_coords[1000][3] = {0.0};
+
+    vector<vector<double> > coords_vec(n_atoms, vector<double>(3));
+
+    //新插入的粒子坐标
     double new_coords[3] = {0.0};
     //vector<vector<double>> coords(n_atoms, vector<double>(3));
     //vector<vector<double>> old_coords(n_atoms, vector<double>(3));
@@ -312,8 +316,9 @@ int main(int argc, const char **argv)
 
         //记录应该将新创建的原子拷贝到原来构型坐标的第一维位置
         int count = n_atoms;
-        // Decide if we are performing an atom move, or a volume move
-        //if (rand(0.0, 1.0) <= 1.0 / n_atoms)
+        // Decide if we are performing an atom move, or a  move
+
+        //执行随意位移
         if (rand(0.0, 1.0) <=  prob_move)//translation
         {
             // Make the move - translate by a delta in each dimension
@@ -346,12 +351,13 @@ int main(int argc, const char **argv)
 
             //如何将该原子坐标加入原来的构型坐标二维数组中
 
-            coords[count++][0] = new_coords[0];
-            coords[count++][1] = new_coords[1];
-            coords[count++][2] = new_coords[2];
+            coords[n_atoms][0] = new_coords[0];
+            coords[n_atoms][1] = new_coords[1];
+            coords[n_atoms][2] = new_coords[2];
 
             //更新n_atoms值
-            n_atoms = count;
+            //n_atoms = count;
+            n_atoms++;
 
 
 //            // 1 in $n_atoms chance of being here. Perform a volume move
@@ -401,7 +407,18 @@ int main(int argc, const char **argv)
         }
         else//destroy trial
         {
+            // Pick a random atom
+            atom = int( rand(0, n_atoms) );
 
+            //不要忘记每次移除一个粒子，需要紧凑整个数组，并更新n_atoms值
+            //移除其实就是从atom后至最后一个每个坐标向前移动一位覆盖atom处的坐标
+            for(int i = atom; i < n_atoms - 1; i++)
+            {
+                coords[i][0] = coords[i + 1][0];
+                coords[i][1] = coords[i + 1][1];
+                coords[i][2] = coords[i + 1][2];
+            }
+            n_atoms--;
         }
 
         // calculate the new energy

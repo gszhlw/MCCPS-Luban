@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" "/Users/zlw/CLionProjects/MCCPS luban"
+"C:\Program Files\JetBrains\CLion 2022.1\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\zlw\MCCPS-Luban -B D:\zlw\MCCPS-Luban\cmake-build-debug
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/zlw/CLionProjects/MCCPS luban/cmake-build-debug
+-- Build files have been written to: D:/zlw/MCCPS-Luban/cmake-build-debug

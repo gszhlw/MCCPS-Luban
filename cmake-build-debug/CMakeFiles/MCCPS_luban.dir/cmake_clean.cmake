@@ -1,7 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MCCPS_luban.dir/luban_reduced_unit_npt.cpp.o"
-  "MCCPS_luban"
+  "CMakeFiles/MCCPS_luban.dir/luban_mc_npt.cpp.obj"
+  "CMakeFiles/MCCPS_luban.dir/luban_mc_npt.cpp.obj.d"
+  "MCCPS_luban.exe"
+  "MCCPS_luban.exe.manifest"
   "MCCPS_luban.pdb"
+  "libMCCPS_luban.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
