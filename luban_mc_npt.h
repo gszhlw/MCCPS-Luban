@@ -17,7 +17,7 @@ const int n_atoms = 500;
 const int num_moves = 20000000;
 
 // Set the size of the box (in Angstroms)
-double box_size[3] = { 28.0, 28.0, 28.0 };
+double box_size[3] = { 60.0, 60.0, 60.0 };
 
 // The maximum amount that the atom can be translated by
 const double max_translate = 0.2;   // angstroms

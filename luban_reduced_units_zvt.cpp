@@ -424,9 +424,6 @@ int main(int argc, const char **argv)
         // calculate the new energy
         const double new_energy = calculate_energy(coords, n_atoms, box_size, sigma, epsilon,r_cut);
 
-        // calculate the new volume of the box
-        //const double V_new = box_size[0] * box_size[1] * box_size[2];
-
         bool accept = false;
 
         // Automatically accept if the energy goes down

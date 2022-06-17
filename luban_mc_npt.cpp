@@ -197,7 +197,7 @@ int main(int argc, const char **argv)
 
 
         //能量平均值计算，5000为可视化后确定的能量开始收敛的step
-        if(move > 100000)
+        if(move > 50000)
         {
             //  count++;
             move_cal = 1.0 * (move - 100000);
@@ -226,12 +226,12 @@ int main(int argc, const char **argv)
         }
 
         // print the coordinates every 500000 moves
-      /*
-        if (move % 500000 == 0)
+
+        if (move % 10000 == 0)
         {
             print_pdb(coords, n_atoms, move);
         }
-        */
+
     }
     chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
 

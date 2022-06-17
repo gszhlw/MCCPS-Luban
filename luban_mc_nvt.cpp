@@ -100,7 +100,7 @@ int main(int argc, const char **argv)
      */
 
     //如果需要读入外部构型文件，则需要执行下列代码
-    /*
+/*
     ifstream file;
     int LINES;
     char filename[512]="input_box.txt";
@@ -135,6 +135,7 @@ int main(int argc, const char **argv)
 */
 
     // 如果需要随机生成构型坐标，则使用下列代码 Randomly generate the coordinates of the atoms in the box
+
     for (int i = 0; i < n_atoms; i = i + 1)
     {
        // coords[i] = new double[3];
@@ -283,12 +284,12 @@ int main(int argc, const char **argv)
         }
 
         // print the coordinates every 10000 moves
-        /*
+/*
         if (move % 10000 == 0)
         {
             print_pdb(coords, n_atoms, move);
         }
-         */
+*/
     }
 
 

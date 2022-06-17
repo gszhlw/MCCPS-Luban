@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/zlw/CLionProjects/MCCPS luban/luban_mc_nvt.cpp
+luban_mc_nvt.h
+/Users/zlw/CLionProjects/MCCPS luban/luban_mc_nvt.h
+
+/Users/zlw/CLionProjects/MCCPS luban/luban_mc_nvt.h
+cstdio
+-
+cstdlib
+-
+cmath
+-
+iostream
+-
+chrono
+-
+vector
+-
+fstream
+-
+
